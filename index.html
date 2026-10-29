@@ -193,19 +193,6 @@
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .mast img {
-        opacity: 1;
-      }
-
-      .line {
-        --wash: 0;
-        --sink: 0;
-        --stroke: 1.2px;
-        font-variation-settings: "EXPO" 0;
-      }
-    }
-
     @media print {
       .sheet { padding: 8vh 1rem; }
       .line { font-variation-settings: "EXPO" 0; }
@@ -243,7 +230,6 @@
   </main>
   <script>
     (function () {
-      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
       var lines = [].slice.call(document.querySelectorAll(".line"));
       var mast = document.querySelector(".mast");
       var bird = document.querySelector(".mast img");
@@ -320,7 +306,6 @@
       }
 
       function apply() {
-        if (reduce.matches) return;
         for (var i = 0; i < lines.length; i++) {
           if (lines[i].classList.contains("is-intro")) continue;
           paint(lines[i], expoAt(lines[i]), i);
@@ -329,7 +314,7 @@
 
       var queued = false;
       function kick() {
-        if (reduce.matches || queued) return;
+        if (queued) return;
         queued = true;
         requestAnimationFrame(function () {
           queued = false;
@@ -342,14 +327,6 @@
       function relayout() {
         centerTitle();
         measureHeavy();
-        if (reduce.matches) {
-          for (var i = 0; i < lines.length; i++) {
-            lines[i].classList.remove("is-intro");
-            clearLine(lines[i]);
-          }
-          if (bird) bird.style.opacity = "1";
-          return;
-        }
         if (!introStarted) {
           introStarted = true;
           runIntro();
@@ -357,16 +334,6 @@
         }
         apply();
       }
-
-      reduce.addEventListener("change", function () {
-        if (reduce.matches) {
-          for (var i = 0; i < lines.length; i++) clearLine(lines[i]);
-          if (bird) bird.style.opacity = "1";
-        } else {
-          measureHeavy();
-          apply();
-        }
-      });
 
       var hoverFrame = new WeakMap();
 
@@ -395,14 +362,6 @@
         }
 
         function frame(now) {
-          if (reduce.matches) {
-            for (var r = 0; r < lines.length; r++) {
-              lines[r].classList.remove("is-intro");
-              clearLine(lines[r]);
-            }
-            if (bird) bird.style.opacity = "1";
-            return;
-          }
           if (bird) {
             var birdT = (now - started) / birdDur;
             if (birdT < 0) birdT = 0;
@@ -433,7 +392,6 @@
       }
 
       function playLink(link, opening) {
-        if (reduce.matches) return;
         var items = link.classList.contains("line") ? [link] : [].slice.call(link.querySelectorAll(".line"));
         if (!items.length) return;
         var running = hoverFrame.get(link);
@@ -462,11 +420,6 @@
         var dur = 160;
 
         function frame(now) {
-          if (reduce.matches) {
-            hoverFrame.delete(link);
-            items.forEach(clearLine);
-            return;
-          }
           var t = (now - start) / dur;
           if (t > 1) t = 1;
           var u = smooth(t);

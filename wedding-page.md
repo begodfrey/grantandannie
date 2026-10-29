@@ -27,9 +27,9 @@ The type stops growing once the window is wider than 800px, and the column stays
 
 ## Scroll
 
-On scroll, a line’s place in the window sets `EXPO`. At the very top it is 100, thin and nearly invisible, the same washed-out state as the bottom. A quarter of the way down it is -100, the heaviest weight. At the middle it is 0. At the bottom it is 100 again, and the lower fade still makes the lowest lines disappear a little sooner than a straight ramp. The paper wash, the ink glow, and the extra stroke on the heavy side are still commented out. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
+On scroll, a line’s place in the window sets `EXPO`. At the very top it is 100, thin and nearly invisible, the same washed-out state as the bottom. A quarter of the way down it is -100, the heaviest weight. At the middle it is 0. At the bottom it is 100 again, and the lower fade still makes the lowest lines disappear a little sooner than a straight ramp. The paper wash, the ink glow, and the extra stroke on the heavy side are still commented out. The entrance, the scroll weight, and the hover run even when the device asks for reduced motion.
 
-When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next. Reduced motion skips the entrance.
+When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next.
 
 Link underlines are a rounded bar under the words, sitting close to the letters. Where the letters are fading out, at the very top and toward the bottom, the bar thins with them, down to 0.1px. Through the heavy band it stays at the middle weight while that extra stroke is commented out. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
