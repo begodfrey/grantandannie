@@ -30,13 +30,13 @@ The type stops growing once the window is wider than 800px, and the column stays
 
 On scroll, each line’s distance from the middle of the window sets `EXPO`: -100 at the top, 0 at the center, 100 at the bottom. Toward 100 the letters go thin and the ink mixes into the paper, so words near the bottom nearly disappear. Toward -100 they go thick, pick up an ink-colored glow, and read even blacker. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
 
-When the page loads, every line starts in that thin bottom state and eases into the weight for where it sits. The lines run in order down the page, each one starting just after the line above. The entrance is under a second. Reduced motion skips it.
+When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page, each one waiting before it starts. Reduced motion skips the entrance.
 
 Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: a heavy bar at the top of the window, and 0.1px at the bottom. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
 ## Header
 
-A spinning pigeon sits above the words. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens.
+A spinning pigeon sits above the words and fades in before the first line. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens.
 
 ## Links
 

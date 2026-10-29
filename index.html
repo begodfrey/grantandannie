@@ -87,6 +87,7 @@
       mix-blend-mode: darken;
       pointer-events: none;
       user-select: none;
+      opacity: 0;
     }
 
     .sheet {
@@ -211,6 +212,10 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .mast img {
+        opacity: 1;
+      }
+
       .line {
         --wash: 0;
         --sink: 0;
@@ -262,6 +267,7 @@
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
       var lines = [].slice.call(document.querySelectorAll(".line"));
       var mast = document.querySelector(".mast");
+      var bird = document.querySelector(".mast img");
       var title = document.querySelector("h1 .line");
       var heavy = [];
       if (!lines.length) return;
@@ -348,6 +354,7 @@
             lines[i].classList.remove("is-intro");
             clearLine(lines[i]);
           }
+          if (bird) bird.style.opacity = "1";
           return;
         }
         if (!introStarted) {
@@ -361,6 +368,7 @@
       reduce.addEventListener("change", function () {
         if (reduce.matches) {
           for (var i = 0; i < lines.length; i++) clearLine(lines[i]);
+          if (bird) bird.style.opacity = "1";
         } else {
           measureHeavy();
           apply();
@@ -382,9 +390,12 @@
       }
 
       function runIntro() {
-        var stagger = 64;
-        var dur = 240;
-        var t0 = performance.now();
+        var stagger = 260;
+        var dur = 560;
+        var birdDur = 560;
+        var started = performance.now();
+        var t0 = started + birdDur;
+        if (bird) bird.style.opacity = "0";
         for (var i = 0; i < lines.length; i++) {
           lines[i].classList.add("is-intro");
           paint(lines[i], 100, i);
@@ -396,7 +407,14 @@
               lines[r].classList.remove("is-intro");
               clearLine(lines[r]);
             }
+            if (bird) bird.style.opacity = "1";
             return;
+          }
+          if (bird) {
+            var birdT = (now - started) / birdDur;
+            if (birdT < 0) birdT = 0;
+            if (birdT > 1) birdT = 1;
+            bird.style.opacity = easeOut(birdT).toFixed(3);
           }
           var pending = false;
           for (var n = 0; n < lines.length; n++) {
