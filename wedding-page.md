@@ -23,7 +23,7 @@ IN DECEMBER
 OUR REGISTRY
 EMAIL US
 
-The type stops growing once the window is wider than 800px, and the column stays centered. Below 640px the type is a little smaller, so a phone keeps more space on either side of the lines. On a desktop window there is `18vh` of space above “Grant and Annie”, and the three groups of lines are separated by `clamp(5.5rem, 18vh, 11rem)`. On a narrow or short screen the space above the title is `22vh`, and the gap between those groups is two thirds of that clamp. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
+The type stops growing once the window is wider than 800px, and the column stays centered. Below 640px the type is a little smaller, so a phone keeps more space on either side of the lines. On a desktop window there is `18vh` of space above “Grant and Annie”, and the three groups of lines are separated by `clamp(5.5rem, 18vh, 11rem)`. On a narrow or short screen the space above the title is `22vh`, the gap between those groups is two thirds of that clamp, and the space between R.S.V.P., the registry, and email is half of `clamp(4.5rem, 16vh, 9rem)`. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
 
 ## Scroll
 

@@ -134,6 +134,12 @@
       gap: clamp(4.5rem, 16vh, 9rem);
     }
 
+    @media (max-width: 480px), (max-height: 500px) and (max-width: 950px) {
+      nav {
+        gap: calc(clamp(4.5rem, 16vh, 9rem) * 0.5);
+      }
+    }
+
     .line {
       --expo: 0;
       --wash: 0;
