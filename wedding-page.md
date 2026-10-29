@@ -24,13 +24,15 @@ VOUS PLAÎT
 OUR REGISTRY
 EMAIL US
 
-The type stops growing once the window is wider than 800px, and the column stays centered. A top margin places “Grant and Annie” on the vertical center of the window when the page opens. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
+The type stops growing once the window is wider than 800px, and the column stays centered. Below 640px the type is a little smaller, so a phone keeps more space on either side of the lines. A top margin places “Grant and Annie” on the vertical center of the window when the page opens. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
 
 ## Scroll
 
-On scroll, each line’s distance from the middle of the window sets `EXPO`: 100 at the top, 0 at the center, -100 at the bottom. Toward 100 the ink mixes into the paper and a paper-colored shadow eats the letter edges, so the words sink into the background. Toward -100 that reverses: the letters pick up an ink-colored glow and a slight stroke, so the heavy end of the axis reads even blacker. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
+On scroll, each line’s distance from the middle of the window sets `EXPO`: -100 at the top, 0 at the center, 100 at the bottom. Toward 100 the letters go thin and the ink mixes into the paper, so words near the bottom nearly disappear. Toward -100 they go thick, pick up an ink-colored glow, and read even blacker. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
 
-Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: 0.1px at the top of the window, and a much heavier bar at the bottom. Hovering a link eases partway toward the heavy bottom state, partway toward the light top state, and back to the middle. It updates on every frame. The bar drops below the words, then bounces back up to the baseline.
+When the page loads, every line starts in that thin bottom state and eases into the weight for where it sits. The lines run in order down the page, each one starting just after the line above. The entrance is under a second. Reduced motion skips it.
+
+Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: a heavy bar at the top of the window, and 0.1px at the bottom. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
 ## Header
 

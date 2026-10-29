@@ -200,6 +200,16 @@
       outline-offset: 8px;
     }
 
+    @media (max-width: 640px) {
+      .line {
+        font-size: calc((100vw - 2.8rem) / 16.4);
+      }
+
+      .line.rsvp {
+        font-size: calc((100vw - 2.8rem) / 12.35);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .line {
         --wash: 0;
@@ -269,11 +279,13 @@
       }
 
       function clearLine(el) {
+        el.classList.remove("is-underline");
         el.style.removeProperty("font-variation-settings");
         el.style.removeProperty("--expo");
         el.style.removeProperty("--wash");
         el.style.removeProperty("--sink");
         el.style.removeProperty("--stroke");
+        el.style.removeProperty("--bar-drop");
       }
 
       function paint(el, expo, index) {
@@ -292,21 +304,27 @@
         el.style.setProperty("--expo", expo.toFixed(2));
         el.style.setProperty("--wash", wash.toFixed(4));
         el.style.setProperty("--sink", sink.toFixed(4));
-        el.style.setProperty("--stroke", stroke.toFixed(3) + "px");
+        if (!el.classList.contains("is-underline")) {
+          el.style.setProperty("--stroke", stroke.toFixed(3) + "px");
+        }
+      }
+
+      function expoAt(el) {
+        var mid = window.innerHeight / 2;
+        if (mid < 1) return 0;
+        var rect = el.getBoundingClientRect();
+        var y = rect.top + rect.height / 2;
+        var expo = ((y - mid) / mid) * 100;
+        if (expo > 100) expo = 100;
+        if (expo < -100) expo = -100;
+        return expo;
       }
 
       function apply() {
         if (reduce.matches) return;
-        var mid = window.innerHeight / 2;
-        if (mid < 1) return;
         for (var i = 0; i < lines.length; i++) {
-          if (lines[i].classList.contains("is-playing")) continue;
-          var rect = lines[i].getBoundingClientRect();
-          var y = rect.top + rect.height / 2;
-          var expo = ((mid - y) / mid) * 100;
-          if (expo > 100) expo = 100;
-          if (expo < -100) expo = -100;
-          paint(lines[i], expo, i);
+          if (lines[i].classList.contains("is-intro")) continue;
+          paint(lines[i], expoAt(lines[i]), i);
         }
       }
 
@@ -320,14 +338,24 @@
         });
       }
 
+      var introStarted = false;
+
       function relayout() {
         centerTitle();
         measureHeavy();
         if (reduce.matches) {
-          for (var i = 0; i < lines.length; i++) clearLine(lines[i]);
-        } else {
-          apply();
+          for (var i = 0; i < lines.length; i++) {
+            lines[i].classList.remove("is-intro");
+            clearLine(lines[i]);
+          }
+          return;
         }
+        if (!introStarted) {
+          introStarted = true;
+          runIntro();
+          return;
+        }
+        apply();
       }
 
       reduce.addEventListener("change", function () {
@@ -349,65 +377,105 @@
         return a + (b - a) * t;
       }
 
-      function playLink(link) {
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function runIntro() {
+        var stagger = 64;
+        var dur = 240;
+        var t0 = performance.now();
+        for (var i = 0; i < lines.length; i++) {
+          lines[i].classList.add("is-intro");
+          paint(lines[i], 100, i);
+        }
+
+        function frame(now) {
+          if (reduce.matches) {
+            for (var r = 0; r < lines.length; r++) {
+              lines[r].classList.remove("is-intro");
+              clearLine(lines[r]);
+            }
+            return;
+          }
+          var pending = false;
+          for (var n = 0; n < lines.length; n++) {
+            var el = lines[n];
+            if (!el.classList.contains("is-intro")) continue;
+            var local = (now - t0 - n * stagger) / dur;
+            var target = expoAt(el);
+            if (local <= 0) {
+              pending = true;
+              paint(el, 100, n);
+            } else if (local >= 1) {
+              el.classList.remove("is-intro");
+              paint(el, target, n);
+            } else {
+              pending = true;
+              paint(el, lerp(100, target, easeOut(local)), n);
+            }
+          }
+          if (pending) requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      function playLink(link, opening) {
         if (reduce.matches) return;
         var items = link.classList.contains("line") ? [link] : [].slice.call(link.querySelectorAll(".line"));
         if (!items.length) return;
         var running = hoverFrame.get(link);
         if (running) cancelAnimationFrame(running);
-        items.forEach(function (el) { el.classList.add("is-playing"); });
+        var states = items.map(function (el) {
+          var strokeNow = parseFloat(el.style.getPropertyValue("--stroke"));
+          var dropRaw = el.style.getPropertyValue("--bar-drop");
+          var dropNow = parseFloat(dropRaw);
+          if (!isFinite(strokeNow)) strokeNow = 1.15;
+          if (!dropRaw || !isFinite(dropNow)) dropNow = 0.045;
+          var idx = lines.indexOf(el);
+          var expo = expoAt(el);
+          var heavyPx = heavy[idx] || 8;
+          var restStroke = expo >= 0
+            ? 1.15 + (0.1 - 1.15) * (expo / 100)
+            : 1.15 + (heavyPx - 1.15) * Math.pow(-expo / 100, 3);
+          return {
+            el: el,
+            fromStroke: strokeNow,
+            fromDrop: dropNow,
+            toStroke: opening ? Math.min(restStroke + 2.4, 4.6) : restStroke,
+            toDrop: opening ? 0.16 : 0.045
+          };
+        });
+        items.forEach(function (el) { el.classList.add("is-underline"); });
         var start = performance.now();
-        var dur = 290;
+        var dur = 160;
 
         function frame(now) {
+          if (reduce.matches) {
+            hoverFrame.delete(link);
+            items.forEach(clearLine);
+            return;
+          }
           var t = (now - start) / dur;
           if (t > 1) t = 1;
-          var expo;
-          var wash;
-          var sink;
-          var split = 0.42;
-          if (t < split) {
-            var u = smooth(t / split);
-            expo = lerp(-46, 46, u);
-            wash = lerp(0, 0.38, u);
-            sink = lerp(0.38, 0, u);
-          } else {
-            var u2 = smooth((t - split) / (1 - split));
-            expo = lerp(46, 0, u2);
-            wash = lerp(0.38, 0, u2);
-            sink = 0;
-          }
-          var rest = 0.045;
-          var amp = 0.26;
-          var drop;
-          if (t < 0.18) {
-            drop = rest + amp * smooth(t / 0.18);
-          } else {
-            var bu = (t - 0.18) / 0.82;
-            drop = rest + amp * Math.exp(-6.4 * bu) * Math.cos(bu * Math.PI * 2.2);
-          }
-          for (var n = 0; n < items.length; n++) {
-            var el = items[n];
-            var idx = lines.indexOf(el);
-            var heavyPx = heavy[idx] || 8;
-            var mid = 1.15;
-            var light = 0.55;
-            var dark = mid + (heavyPx - mid) * 0.4;
-            var stroke = t < split
-              ? lerp(dark, light, smooth(t / split))
-              : lerp(light, mid, smooth((t - split) / (1 - split)));
-            el.style.fontVariationSettings = '"EXPO" ' + expo.toFixed(2);
-            el.style.setProperty("--wash", wash.toFixed(4));
-            el.style.setProperty("--sink", sink.toFixed(4));
-            el.style.setProperty("--stroke", stroke.toFixed(3) + "px");
-            el.style.setProperty("--bar-drop", drop.toFixed(4) + "em");
+          var u = smooth(t);
+          for (var n = 0; n < states.length; n++) {
+            var s = states[n];
+            s.el.style.setProperty("--stroke", lerp(s.fromStroke, s.toStroke, u).toFixed(3) + "px");
+            s.el.style.setProperty("--bar-drop", lerp(s.fromDrop, s.toDrop, u).toFixed(4) + "em");
           }
           if (t < 1) {
             hoverFrame.set(link, requestAnimationFrame(frame));
           } else {
             hoverFrame.delete(link);
-            items.forEach(function (el) { el.classList.remove("is-playing"); });
-            apply();
+            if (!opening) {
+              items.forEach(function (el) {
+                el.classList.remove("is-underline");
+                el.style.removeProperty("--bar-drop");
+              });
+              apply();
+            }
           }
         }
 
@@ -415,7 +483,8 @@
       }
 
       [].slice.call(document.querySelectorAll("nav a")).forEach(function (link) {
-        link.addEventListener("mouseenter", function () { playLink(link); });
+        link.addEventListener("mouseenter", function () { playLink(link, true); });
+        link.addEventListener("mouseleave", function () { playLink(link, false); });
       });
 
       window.addEventListener("scroll", kick, { passive: true });
