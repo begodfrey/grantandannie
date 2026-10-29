@@ -505,5 +505,16 @@
       relayout();
     })();
   </script>
+  <script>
+    if (typeof window !== "undefined") {
+      if ('group' in window.console) {
+        console.groupCollapsed('👁🚫💻 - I Hate Websites - http://www.ihatewebsites.com')
+        console.info('Does a sandwich artist love sandwiches?')
+        console.groupEnd()
+      } else {
+        console.info('👁🚫💻 - I Hate Websites - http://www.ihatewebsites.com')
+      }
+    }
+  </script>
 </body>
 </html>
