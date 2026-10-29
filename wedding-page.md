@@ -8,7 +8,7 @@ GitHub Pages: in the repository settings, choose Deploy from a branch, branch `m
 
 Exposure Trial VAR italic, the italic file you supplied, embedded as base64. The roman cut has no slant axis, so the page uses the italic, which leans about 16 degrees and has the same `EXPO` axis, from -100 to 100. This cut is a 205TF trial: a short character set, for testing a layout, not a license to publish the font.
 
-The trial has no straight apostrophe, so “s’il” uses a typographic apostrophe. Every line except the R.S.V.P. is set in capitals with CSS. The R.S.V.P. is two lines: “Répondez S’il” and “Vous Plaît”. The first letter of each word is a larger full capital, and the remaining letters are smaller small caps.
+Every line is set in capitals with CSS. The R.S.V.P. line reads “☞ RSVP ☜”. Exposure has no pointing-finger glyphs, so those two characters use a symbol font: Apple Symbols, Segoe UI Symbol, Noto Sans Symbols 2, then DejaVu Sans.
 
 ## Layout
 
@@ -19,8 +19,7 @@ ARE GETTING MARRIED
 JOIN US IN
 CELEBRATION
 IN DECEMBER
-RÉPONDEZ S’IL
-VOUS PLAÎT
+☞ RSVP ☜
 OUR REGISTRY
 EMAIL US
 
@@ -40,4 +39,4 @@ A spinning pigeon sits above the words and fades in before the first line. `dark
 
 ## Links
 
-Linked, not embedded. R.S.V.P. is “Répondez S’il” and “Vous Plaît”, opening https://form.typeform.com/to/afrsCaCx in a new tab. “Our registry” opens https://www.zola.com/wedding/reedsmartin/registry in a new tab. “Email us” is last. It is a `mailto:grantandannie2026@gmail.com` link and stays in the same tab.
+Linked, not embedded. R.S.V.P. is “☞ RSVP ☜”, opening https://form.typeform.com/to/afrsCaCx in a new tab. “Our registry” opens https://www.zola.com/wedding/reedsmartin/registry in a new tab. “Email us” is last. It is a `mailto:grantandannie2026@gmail.com` link and stays in the same tab.
