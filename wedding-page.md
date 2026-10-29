@@ -1,6 +1,6 @@
 # Wedding page
 
-The site is `index.html` at the root of the repository. Open that file directly in a browser, or serve the repository with GitHub Pages. The tab icon is the spinning pigeon (`pigeon.gif`). Home-screen icons and link previews use a still of the same bird, because those surfaces do not play an animation.
+The site is `index.html` at the root of the repository. Open that file directly in a browser, or serve the repository with GitHub Pages. The tab and home-screen icon is a cream square with “G&A” in the thin italic. Link previews still use a still of the pigeon.
 
 GitHub Pages: in the repository settings, choose Deploy from a branch, branch `main`, folder `/ (root)`. Until a custom domain is attached, the page is at https://begodfrey.github.io/grantandannie/. When you have the domain, add a `CNAME` file whose only line is that domain. `.nojekyll` is in the repo so Pages serves the file as-is.
 
