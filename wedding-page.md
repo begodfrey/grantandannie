@@ -27,11 +27,11 @@ The type stops growing once the window is wider than 800px, and the column stays
 
 ## Scroll
 
-On scroll, each line’s distance from the middle of the window sets `EXPO`: -100 at the top, 0 at the center, 100 at the bottom. Toward 100 the letters go thin and the ink mixes into the paper, so words near the bottom nearly disappear. Toward -100 they go thick, pick up an ink-colored glow, and read even blacker. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
+On scroll, each line’s distance from the middle of the window sets `EXPO`: -100 at the top, 0 at the center, 100 at the bottom. Below the center the fade comes on sooner: the lowest line is nearly gone, and each line above it is only a little easier to see. Above the center the letters still get heavier through `EXPO`. The paper wash, the ink glow, and the extra stroke on that top state are commented out for now. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
 
 When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next. Reduced motion skips the entrance.
 
-Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: a heavy bar at the top of the window, and 0.1px at the bottom. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
+Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness below the center, down to 0.1px at the bottom. Above the center the bar stays at the middle weight while the top stroke is commented out. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
 ## Header
 

@@ -142,17 +142,18 @@
       color: color-mix(
         in srgb,
         var(--paper) calc(var(--wash) * 100%),
-        color-mix(in srgb, #050403 calc(var(--sink) * 100%), var(--ink))
+        var(--ink)
+        /* color-mix(in srgb, #050403 calc(var(--sink) * 100%), var(--ink)) */
       );
-      -webkit-text-stroke: calc(var(--sink) * 0.055em) var(--ink);
+      /* -webkit-text-stroke: calc(var(--sink) * 0.055em) var(--ink); */
       paint-order: stroke fill;
       text-shadow:
         0 0 calc(var(--wash) * 0.05em) var(--paper),
         0 0 calc(var(--wash) * 0.16em) var(--paper),
-        0 0 calc(var(--wash) * 0.36em) var(--paper),
-        0 0 calc(var(--sink) * 0.012em) var(--ink),
+        0 0 calc(var(--wash) * 0.36em) var(--paper);
+        /* 0 0 calc(var(--sink) * 0.012em) var(--ink),
         0 0 calc(var(--sink) * 0.04em) var(--ink),
-        0 0 calc(var(--sink) * 0.09em) rgba(20, 18, 16, 0.9);
+        0 0 calc(var(--sink) * 0.09em) rgba(20, 18, 16, 0.9); */
     }
 
     .finger {
@@ -272,20 +273,32 @@
         el.style.removeProperty("--bar-drop");
       }
 
+      function bottomFade(rise) {
+        if (rise <= 0) return 0;
+        var x = Math.min(1, rise / 0.92);
+        return Math.pow(x, 1.35);
+      }
+
       function paint(el, expo, index) {
         var rise = Math.max(0, expo) / 100;
-        var wash = rise * rise * rise;
-        var drop = Math.max(0, -expo) / 100;
-        var sink = drop * drop * drop;
-        var heavyPx = heavy[index] || 8;
-        var stroke;
+        var faded = bottomFade(rise);
+        var weightExpo = expo < 0 ? expo : faded * 100;
+        var wash = 0;
+        var sink = 0;
+        var stroke = 1.15;
         if (expo >= 0) {
-          stroke = 1.15 + (0.1 - 1.15) * (expo / 100);
+          wash = faded;
+          stroke = 1.15 + (0.1 - 1.15) * faded;
         } else {
-          stroke = 1.15 + (heavyPx - 1.15) * sink;
+          // Top of the window keeps the EXPO weight only.
+          // Wash, stroke, and sink are commented out so the top can be compared without them.
+          // var drop = Math.max(0, -expo) / 100;
+          // sink = drop * drop * drop;
+          // wash = 0;
+          // stroke = 1.15 + ((heavy[index] || 8) - 1.15) * sink;
         }
-        el.style.fontVariationSettings = '"EXPO" ' + expo.toFixed(2);
-        el.style.setProperty("--expo", expo.toFixed(2));
+        el.style.fontVariationSettings = '"EXPO" ' + weightExpo.toFixed(2);
+        el.style.setProperty("--expo", weightExpo.toFixed(2));
         el.style.setProperty("--wash", wash.toFixed(4));
         el.style.setProperty("--sink", sink.toFixed(4));
         if (!el.classList.contains("is-underline")) {
@@ -429,12 +442,11 @@
           var dropNow = parseFloat(dropRaw);
           if (!isFinite(strokeNow)) strokeNow = 1.15;
           if (!dropRaw || !isFinite(dropNow)) dropNow = 0.045;
-          var idx = lines.indexOf(el);
           var expo = expoAt(el);
-          var heavyPx = heavy[idx] || 8;
           var restStroke = expo >= 0
-            ? 1.15 + (0.1 - 1.15) * (expo / 100)
-            : 1.15 + (heavyPx - 1.15) * Math.pow(-expo / 100, 3);
+            ? 1.15 + (0.1 - 1.15) * bottomFade(expo / 100)
+            : 1.15;
+            // : 1.15 + ((heavy[lines.indexOf(el)] || 8) - 1.15) * Math.pow(-expo / 100, 3);
           return {
             el: el,
             fromStroke: strokeNow,
