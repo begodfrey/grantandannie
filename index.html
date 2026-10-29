@@ -64,6 +64,11 @@
       font-style: italic;
       font-synthesis: none;
       text-rendering: optimizeLegibility;
+      opacity: 0;
+    }
+
+    html.ready body {
+      opacity: 1;
     }
 
     ::selection {
@@ -194,10 +199,12 @@
     }
 
     @media print {
+      body { opacity: 1; }
       .sheet { padding: 8vh 1rem; }
       .line { font-variation-settings: "EXPO" 0; }
     }
   </style>
+  <noscript><style>body { opacity: 1; }</style></noscript>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute">
@@ -323,10 +330,12 @@
       }
 
       var introStarted = false;
+      var fontsReady = false;
 
       function relayout() {
         centerTitle();
         measureHeavy();
+        if (!fontsReady) return;
         if (!introStarted) {
           introStarted = true;
           runIntro();
@@ -360,6 +369,7 @@
           lines[i].classList.add("is-intro");
           paint(lines[i], 100, i);
         }
+        document.documentElement.classList.add("ready");
 
         function frame(now) {
           if (bird) {
@@ -454,8 +464,14 @@
       window.addEventListener("resize", relayout);
       var img = document.querySelector(".mast img");
       if (img && !img.complete) img.addEventListener("load", relayout);
-      document.fonts.ready.then(relayout);
-      relayout();
+      function begin() {
+        if (fontsReady) return;
+        fontsReady = true;
+        relayout();
+      }
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(begin);
+      else begin();
+      setTimeout(begin, 2500);
     })();
   </script>
   <script>
