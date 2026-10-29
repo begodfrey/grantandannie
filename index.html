@@ -290,8 +290,8 @@
           wash = faded;
           stroke = 1.15 + (0.1 - 1.15) * faded;
         } else {
-          // Top of the window keeps the EXPO weight only.
-          // Wash, stroke, and sink are commented out so the top can be compared without them.
+          // Heavy band keeps the EXPO weight only.
+          // Wash, stroke, and sink stay commented out on this side.
           // var drop = Math.max(0, -expo) / 100;
           // sink = drop * drop * drop;
           // wash = 0;
@@ -307,14 +307,16 @@
       }
 
       function expoAt(el) {
-        var mid = window.innerHeight / 2;
-        if (mid < 1) return 0;
+        var vh = window.innerHeight;
+        if (vh < 1) return 0;
         var rect = el.getBoundingClientRect();
         var y = rect.top + rect.height / 2;
-        var expo = ((y - mid) / mid) * 100;
-        if (expo > 100) expo = 100;
-        if (expo < -100) expo = -100;
-        return expo;
+        var p = y / vh;
+        if (p < 0) p = 0;
+        if (p > 1) p = 1;
+        if (p <= 0.25) return 100 - (p / 0.25) * 200;
+        if (p <= 0.5) return -100 + ((p - 0.25) / 0.25) * 100;
+        return ((p - 0.5) / 0.5) * 100;
       }
 
       function apply() {
