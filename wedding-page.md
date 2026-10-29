@@ -35,7 +35,7 @@ Link underlines are a rounded bar under the words, sitting close to the letters.
 
 ## Header
 
-A spinning pigeon sits above the words and fades in before the first line. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens.
+A spinning pigeon sits above the words and fades in before the first line. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens. On a narrow or short screen that top space shrinks, so “Join us in” still peeks into view.
 
 ## Links
 
