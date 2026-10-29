@@ -177,48 +177,6 @@
       font-size: 0.78em;
     }
 
-    .line.is-playing {
-      animation: link-cycle 1.15s linear;
-    }
-
-    @keyframes link-cycle {
-      0% {
-        font-variation-settings: "EXPO" -100;
-        --wash: 0;
-        --sink: 1;
-        --stroke: var(--heavy, 8px);
-        --bar-drop: 0.48em;
-      }
-      40% {
-        font-variation-settings: "EXPO" 100;
-        --wash: 1;
-        --sink: 0;
-        --stroke: 0.1px;
-        --bar-drop: 0.3em;
-      }
-      70% {
-        font-variation-settings: "EXPO" 0;
-        --wash: 0;
-        --sink: 0;
-        --stroke: 1.15px;
-        --bar-drop: -0.02em;
-      }
-      86% {
-        font-variation-settings: "EXPO" 0;
-        --wash: 0;
-        --sink: 0;
-        --stroke: 1.15px;
-        --bar-drop: 0.1em;
-      }
-      100% {
-        font-variation-settings: "EXPO" 0;
-        --wash: 0;
-        --sink: 0;
-        --stroke: 1.15px;
-        --bar-drop: 0.045em;
-      }
-    }
-
     a {
       color: inherit;
       text-decoration: none;
@@ -249,7 +207,6 @@
         --stroke: 1.2px;
         font-variation-settings: "EXPO" 0;
       }
-      .line.is-playing { animation: none; }
     }
 
     @media print {
@@ -284,8 +241,7 @@
     <nav aria-label="Wedding">
       <a class="stack" href="https://form.typeform.com/to/afrsCaCx" target="_blank" rel="noopener noreferrer">
         <span class="line rsvp"><span class="lead">R</span><span class="rest">épondez</span> <span class="lead">S</span><span class="rest">’il</span></span>
-        <span class="line rsvp"><span class="lead">V</span><span class="rest">ous</span></span>
-        <span class="line rsvp"><span class="lead">P</span><span class="rest">laît</span></span>
+        <span class="line rsvp"><span class="lead">V</span><span class="rest">ous</span> <span class="lead">P</span><span class="rest">laît</span></span>
       </a>
       <a class="line" href="https://www.zola.com/wedding/reedsmartin/registry" target="_blank" rel="noopener noreferrer">Our registry</a>
       <a class="line" href="mailto:grantandannie2026@gmail.com">Email us</a>
@@ -383,26 +339,83 @@
         }
       });
 
+      var hoverFrame = new WeakMap();
+
+      function smooth(t) {
+        return t * t * (3 - 2 * t);
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
       function playLink(link) {
         if (reduce.matches) return;
         var items = link.classList.contains("line") ? [link] : [].slice.call(link.querySelectorAll(".line"));
-        items.forEach(function (el) {
-          el.classList.remove("is-playing");
-          void el.offsetWidth;
-          el.classList.add("is-playing");
-        });
+        if (!items.length) return;
+        var running = hoverFrame.get(link);
+        if (running) cancelAnimationFrame(running);
+        items.forEach(function (el) { el.classList.add("is-playing"); });
+        var start = performance.now();
+        var dur = 290;
+
+        function frame(now) {
+          var t = (now - start) / dur;
+          if (t > 1) t = 1;
+          var expo;
+          var wash;
+          var sink;
+          var split = 0.42;
+          if (t < split) {
+            var u = smooth(t / split);
+            expo = lerp(-46, 46, u);
+            wash = lerp(0, 0.38, u);
+            sink = lerp(0.38, 0, u);
+          } else {
+            var u2 = smooth((t - split) / (1 - split));
+            expo = lerp(46, 0, u2);
+            wash = lerp(0.38, 0, u2);
+            sink = 0;
+          }
+          var rest = 0.045;
+          var amp = 0.26;
+          var drop;
+          if (t < 0.18) {
+            drop = rest + amp * smooth(t / 0.18);
+          } else {
+            var bu = (t - 0.18) / 0.82;
+            drop = rest + amp * Math.exp(-6.4 * bu) * Math.cos(bu * Math.PI * 2.2);
+          }
+          for (var n = 0; n < items.length; n++) {
+            var el = items[n];
+            var idx = lines.indexOf(el);
+            var heavyPx = heavy[idx] || 8;
+            var mid = 1.15;
+            var light = 0.55;
+            var dark = mid + (heavyPx - mid) * 0.4;
+            var stroke = t < split
+              ? lerp(dark, light, smooth(t / split))
+              : lerp(light, mid, smooth((t - split) / (1 - split)));
+            el.style.fontVariationSettings = '"EXPO" ' + expo.toFixed(2);
+            el.style.setProperty("--wash", wash.toFixed(4));
+            el.style.setProperty("--sink", sink.toFixed(4));
+            el.style.setProperty("--stroke", stroke.toFixed(3) + "px");
+            el.style.setProperty("--bar-drop", drop.toFixed(4) + "em");
+          }
+          if (t < 1) {
+            hoverFrame.set(link, requestAnimationFrame(frame));
+          } else {
+            hoverFrame.delete(link);
+            items.forEach(function (el) { el.classList.remove("is-playing"); });
+            apply();
+          }
+        }
+
+        hoverFrame.set(link, requestAnimationFrame(frame));
       }
 
       [].slice.call(document.querySelectorAll("nav a")).forEach(function (link) {
         link.addEventListener("mouseenter", function () { playLink(link); });
-      });
-
-      lines.forEach(function (el) {
-        el.addEventListener("animationend", function (event) {
-          if (event.animationName !== "link-cycle") return;
-          el.classList.remove("is-playing");
-          apply();
-        });
       });
 
       window.addEventListener("scroll", kick, { passive: true });
