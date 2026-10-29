@@ -278,23 +278,31 @@
         return Math.pow(x, 1.35);
       }
 
+      function barStroke(expo, index) {
+        if (expo >= 0) {
+          return 1.15 + (0.1 - 1.15) * bottomFade(expo / 100);
+        }
+        var drop = Math.max(0, -expo) / 100;
+        var heavyPx = heavy[index] || 8;
+        var heft = Math.pow(drop, 1.15);
+        return 1.15 + (heavyPx - 1.15) * heft;
+      }
+
       function paint(el, expo, index) {
         var rise = Math.max(0, expo) / 100;
         var faded = bottomFade(rise);
         var weightExpo = expo < 0 ? expo : faded * 100;
         var wash = 0;
         var sink = 0;
-        var stroke = 1.15;
+        var stroke = barStroke(expo, index);
         if (expo >= 0) {
           wash = faded;
-          stroke = 1.15 + (0.1 - 1.15) * faded;
         } else {
-          // Heavy band keeps the EXPO weight only.
-          // Wash, stroke, and sink stay commented out on this side.
+          // Heavy band keeps the EXPO weight. The underline thickens with it.
+          // Wash and sink stay off on this side.
           // var drop = Math.max(0, -expo) / 100;
           // sink = drop * drop * drop;
           // wash = 0;
-          // stroke = 1.15 + ((heavy[index] || 8) - 1.15) * sink;
         }
         el.style.fontVariationSettings = '"EXPO" ' + weightExpo.toFixed(2);
         el.style.setProperty("--expo", weightExpo.toFixed(2));
@@ -419,15 +427,12 @@
           if (!isFinite(strokeNow)) strokeNow = 1.15;
           if (!dropRaw || !isFinite(dropNow)) dropNow = 0.045;
           var expo = expoAt(el);
-          var restStroke = expo >= 0
-            ? 1.15 + (0.1 - 1.15) * bottomFade(expo / 100)
-            : 1.15;
-            // : 1.15 + ((heavy[lines.indexOf(el)] || 8) - 1.15) * Math.pow(-expo / 100, 3);
+          var restStroke = barStroke(expo, lines.indexOf(el));
           return {
             el: el,
             fromStroke: strokeNow,
             fromDrop: dropNow,
-            toStroke: opening ? Math.min(restStroke + 2.4, 4.6) : restStroke,
+            toStroke: opening ? restStroke + 2.2 : restStroke,
             toDrop: opening ? 0.16 : 0.045
           };
         });

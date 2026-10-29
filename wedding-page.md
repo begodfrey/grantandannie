@@ -31,7 +31,7 @@ On scroll, a line’s place in the window sets `EXPO`. At the very top it is 100
 
 The page stays blank, in the paper color, until Exposure is ready and the entrance has been set. That avoids a flash of fallback text on a slow connection. When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next.
 
-Link underlines are a rounded bar under the words, sitting close to the letters. Where the letters are fading out, at the very top and toward the bottom, the bar thins with them, down to 0.1px. Through the heavy band it stays at the middle weight while that extra stroke is commented out. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
+Link underlines are a rounded bar under the words, sitting close to the letters. Where the letters are fading out, at the very top and toward the bottom, the bar thins with them, down to 0.1px. Through the heavy band it thickens with the weight, up to a much heavier bar at the -100 peak. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
 ## Header
 
