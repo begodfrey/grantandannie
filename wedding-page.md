@@ -8,7 +8,7 @@ GitHub Pages: in the repository settings, choose Deploy from a branch, branch `m
 
 Exposure Trial VAR italic, the italic file you supplied, embedded as base64. The roman cut has no slant axis, so the page uses the italic, which leans about 16 degrees and has the same `EXPO` axis, from -100 to 100. This cut is a 205TF trial: a short character set, for testing a layout, not a license to publish the font.
 
-The trial has no straight apostrophe, so “s’il” uses a typographic apostrophe. Every line except the R.S.V.P. is set in capitals with CSS. On “Répondez” and “S’il Vous Plaît”, the first letter of each word stays a full capital and the remaining letters are small caps.
+The trial has no straight apostrophe, so “s’il” uses a typographic apostrophe. Every line except the R.S.V.P. is set in capitals with CSS. The R.S.V.P. is three lines: “Répondez S’il”, “Vous”, and “Plaît”. The first letter of each word is a larger full capital, and the remaining letters are smaller small caps.
 
 ## Layout
 
@@ -19,8 +19,9 @@ ARE GETTING MARRIED
 JOIN US IN
 CELEBRATION
 IN DECEMBER
-RÉPONDEZ S’IL VOUS PLAÎT
-(one line, a little larger, full capital then small caps)
+RÉPONDEZ S’IL
+VOUS
+PLAÎT
 OUR REGISTRY
 EMAIL US
 
@@ -30,7 +31,7 @@ The type stops growing once the window is wider than 800px, and the column stays
 
 On scroll, each line’s distance from the middle of the window sets `EXPO`: 100 at the top, 0 at the center, -100 at the bottom. Toward 100 the ink mixes into the paper and a paper-colored shadow eats the letter edges, so the words sink into the background. Toward -100 that reverses: the letters pick up an ink-colored glow and a slight stroke, so the heavy end of the axis reads even blacker. `prefers-reduced-motion: reduce` holds every line at EXPO 0 with neither wash.
 
-Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: 0.1px at the top of the window, and a much heavier bar at the bottom.
+Link underlines are a rounded bar under the words, sitting close to the letters. The same scroll value sets the thickness: 0.1px at the top of the window, and a much heavier bar at the bottom. Hovering a link jumps it to that heavy bottom state, eases through the light top state, and settles at the middle weight. The bar drops below the words, then bounces back up to the baseline.
 
 ## Header
 
@@ -38,4 +39,4 @@ A spinning pigeon sits above the words. `darken` drops the white field into the 
 
 ## Links
 
-Linked, not embedded. R.S.V.P. is “Répondez / s’il vous plaît”, shown in capitals, opening https://form.typeform.com/to/afrsCaCx in a new tab. “Our registry” opens https://www.zola.com/wedding/reedsmartin/registry in a new tab. “Email us” is last. It is a `mailto:grantandannie2026@gmail.com` link and stays in the same tab.
+Linked, not embedded. R.S.V.P. is “Répondez S’il”, “Vous”, and “Plaît”, opening https://form.typeform.com/to/afrsCaCx in a new tab. “Our registry” opens https://www.zola.com/wedding/reedsmartin/registry in a new tab. “Email us” is last. It is a `mailto:grantandannie2026@gmail.com` link and stays in the same tab.
