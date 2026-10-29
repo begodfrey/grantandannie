@@ -8,7 +8,7 @@ GitHub Pages: in the repository settings, choose Deploy from a branch, branch `m
 
 Exposure Trial VAR italic, the italic file you supplied, embedded as base64. The roman cut has no slant axis, so the page uses the italic, which leans about 16 degrees and has the same `EXPO` axis, from -100 to 100. This cut is a 205TF trial: a short character set, for testing a layout, not a license to publish the font.
 
-The trial has no straight apostrophe, so “s’il” uses a typographic apostrophe. Every line is set in capitals with CSS.
+The trial has no straight apostrophe, so “s’il” uses a typographic apostrophe. Every line except the R.S.V.P. is set in capitals with CSS. On “Répondez” and “S’il Vous Plaît”, the first letter of each word stays a full capital and the remaining letters are small caps.
 
 ## Layout
 
@@ -21,6 +21,7 @@ CELEBRATION
 IN DECEMBER
 RÉPONDEZ
 S’IL VOUS PLAÎT
+(R.S.V.P. lines: full capital, then small caps)
 OUR REGISTRY
 EMAIL US
 
