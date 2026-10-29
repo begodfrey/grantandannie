@@ -1,6 +1,6 @@
 # Wedding page
 
-The site is `index.html` at the root of the repository. Open that file directly in a browser, or serve the repository with GitHub Pages. The tab and home-screen icon is a cream square with “G&A” in the thin italic. Link previews still use a still of the pigeon.
+The site is `index.html` at the root of the repository. Open that file directly in a browser, or serve the repository with GitHub Pages. The tab, the home-screen icon, and the link preview are a cream square with “G&A” in the thin italic.
 
 GitHub Pages: in the repository settings, choose Deploy from a branch, branch `main`, folder `/ (root)`. Until a custom domain is attached, the page is at https://begodfrey.github.io/grantandannie/. When you have the domain, add a `CNAME` file whose only line is that domain. `.nojekyll` is in the repo so Pages serves the file as-is.
 
@@ -23,19 +23,15 @@ IN DECEMBER
 OUR REGISTRY
 EMAIL US
 
-The type stops growing once the window is wider than 800px, and the column stays centered. Below 640px the type is a little smaller, so a phone keeps more space on either side of the lines. A top margin places “Grant and Annie” on the vertical center of the window when the page opens. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
+The type stops growing once the window is wider than 800px, and the column stays centered. Below 640px the type is a little smaller, so a phone keeps more space on either side of the lines. On a desktop window there is `18vh` of space above “Grant and Annie”. On a narrow or short screen that top space shrinks, so “Join us in” still peeks into view. The bottom padding is a little more than one screen, so the last line can be scrolled to the top.
 
 ## Scroll
 
-On scroll, a line’s place in the window sets `EXPO`. At the very top it is 100, thin and nearly invisible, the same washed-out state as the bottom. A quarter of the way down it is -100, the heaviest weight. At the middle it is 0. At the bottom it is 100 again, and the lower fade still makes the lowest lines disappear a little sooner than a straight ramp. The paper wash, the ink glow, and the extra stroke on the heavy side are still commented out. The entrance, the scroll weight, and the hover run even when the device asks for reduced motion.
+The mapping is still in the page. A line’s place in the window would set `EXPO`: 100 at the very top, -100 a quarter of the way down, 0 in the middle, and 100 again at the bottom, with the lower fade making the lowest lines disappear a little sooner than a straight ramp. The calls that apply that mapping are commented out, so after the entrance every line stays at `EXPO` 0, the regular weight, and scrolling does not change it. The paper wash, the ink glow, and the extra stroke on the heavy side are still commented out inside the paint function.
 
-The page stays blank, in the paper color, until Exposure is ready and the entrance has been set. That avoids a flash of fallback text on a slow connection. When the page loads, the pigeon fades in first. Every line starts in that thin bottom state and eases into the weight for where it sits, beginning only after the bird has arrived. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next.
+The page stays blank, in the paper color, until Exposure is ready and the entrance has been set. That avoids a flash of fallback text on a slow connection. When the page loads, every line starts in the thin, nearly invisible state and eases to the regular weight. The lines run in order down the page. Each one takes a little under two seconds to ease in, with a short pause before the next. The entrance and the hover run even when the device asks for reduced motion.
 
-Link underlines are a rounded bar under the words, sitting close to the letters. Where the letters are fading out, at the very top and toward the bottom, the bar thins with them, down to 0.1px. Through the heavy band it thickens with the weight, up to a much heavier bar at the -100 peak. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
-
-## Header
-
-A spinning pigeon sits above the words and fades in before the first line. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens. On a narrow or short screen that top space shrinks, so “Join us in” still peeks into view.
+Link underlines stay at the regular weight. Hovering a link leaves the letters as they are. The underline thickens and drops a little, then returns when the pointer leaves. That move takes about 160ms.
 
 ## Links
 
