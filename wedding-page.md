@@ -19,9 +19,8 @@ ARE GETTING MARRIED
 JOIN US IN
 CELEBRATION
 IN DECEMBER
-RÉPONDEZ
-S’IL VOUS PLAÎT
-(R.S.V.P. lines: full capital, then small caps)
+RÉPONDEZ S’IL VOUS PLAÎT
+(one line, a little larger, full capital then small caps)
 OUR REGISTRY
 EMAIL US
 
@@ -35,7 +34,7 @@ Link underlines are a rounded bar under the words, sitting close to the letters.
 
 ## Header
 
-The sculpture sits above the words. A color filter lifts the black field to gray and softens the highlights, so the photograph reads as a faded plate on the cream page. It is not inverted.
+A spinning pigeon sits above the words. `darken` drops the white field into the cream page, so only the bird shows. The header has `18vh` of space above it, which puts “Grant and Annie” near the vertical center when the page opens.
 
 ## Links
 
